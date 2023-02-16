@@ -52,6 +52,7 @@ results = []
 
 # Iterate over each pair of rows in the dataset
 for i in range(len(data)):
+    flag=0
     for j in range(i + 1, len(data)):
         name1, lat1, lon1 = data[i]
         name2, lat2, lon2 = data[j]
@@ -61,11 +62,15 @@ for i in range(len(data)):
 
         # Check if the distance is less than or equal to 200 meters and if the two names are similar
         if distance <= 200 and is_similar_name(name1, name2):
+            #if match is found set flag=1
+            flag=1
             # Append the two rows to the results list along with a new column indicating that the two names are similar
             results.append(data[i] + [1])
             results.append(data[j] + [1])
-            #add empty line between each pair for readability (if not required then comment next line)
-            results.append([])
+        
+    #if match is not found , add the row with is_similar 0
+    if flag==0 :
+        results.append(data[i] + [0])
 
 # Write the results to a new CSV file
 with open('results.csv', 'w', newline='') as f:
