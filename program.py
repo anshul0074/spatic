@@ -1,14 +1,18 @@
 import csv
-from geopy.distance import geodesic
+import math
 
 # Function to calculate distance between two sets of latitude and longitude coordinates
 def location_distance(lat1, lon1, lat2, lon2):
-    # Convert the input values to float
-    coord1 = (float(lat1), float(lon1))
-    coord2 = (float(lat2), float(lon2))
-    # Calculate the geodesic distance between the two coordinates in meters
-    distance = geodesic(coord1, coord2).meters
-    return distance
+    R = 6371e3
+    phi1 = math.radians(float(lat1))
+    phi2 = math.radians(float(lat2))
+    delta_phi = math.radians(float(lat2) - float(lat1))
+    delta_lambda = math.radians(float(lon2) - float(lon1))
+
+    a = math.sin(delta_phi / 2)**2 + math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2)**2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+
+    return R * c
 
 # Function to calculate Levenshtein distance between two strings
 def levenshtein_distance(s1, s2):
@@ -52,6 +56,9 @@ results = []
 
 # Iterate over each pair of rows in the dataset
 for i in range(len(data)):
+    #check for duplicacy
+    if(i>0 and len(results)>0 and data[i]==results[len(results)-1][:3]):
+        continue
     flag=0
     for j in range(i + 1, len(data)):
         name1, lat1, lon1 = data[i]
@@ -69,8 +76,10 @@ for i in range(len(data)):
             results.append(data[j] + [1])
         
     #if match is not found , add the row with is_similar 0
-    if flag==0 :
+    if flag==0:
         results.append(data[i] + [0])
+
+
 
 # Write the results to a new CSV file
 with open('results.csv', 'w', newline='') as f:
