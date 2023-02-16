@@ -19,9 +19,9 @@ The maximum number of single-character edits (insertions, deletions or substitut
 Approach
 The program reads the input CSV file and stores the data in a list of tuples. The program uses the geopy library to calculate the distance between two latitude and longitude points in meters. The program also uses the Levenshtein distance algorithm to calculate the edit distance between two strings.
 
-The program then iterates over all possible pairs of entries in the data and checks if they are within 200 meters of each other and have a Levenshtein distance less than or equal to 5. If so, the program appends the entries to a list of results.
+The program then iterates over all possible pairs of entries in the data and checks if they are within 200 meters of each other and have a Levenshtein distance less than or equal to 5. If so, the program appends the entries to a list of results with 1. Otherwise if no match is found for a particular row , then it appends the row to the list of results with 0. 
 
-Finally, the program writes the results to an output CSV file with an additional column is_similar which is marked as True / 1 for the entries that satisfy the given criteria. Note: an empty line has been added between each pair for readability, if not required then comment line #68 and re-run the code.
+Finally, the program writes the results to an output CSV file with an additional column is_similar which is marked as True / 1 for the entries that satisfy the given criteria and False / 0 for those entries for which there is no match.
 
 Dependencies
 The program uses the following Python libraries:
